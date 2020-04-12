@@ -93,6 +93,12 @@ class MiCS6814
     set_data(CMD_CONTROL_PWR, 0)
   end
 
+  def write_adc
+    an = [CH_VALUE_NH3, CH_VALUE_CO, CH_VALUE_NO2].map {|ch| get_gas1(ch)}
+    bits = [7] + an.map {|x| [x >> 8, x & 0xff]}.flatten
+    set_data(*bits)
+  end
+
   class MinI2C
     I2C_SLAVE       = 0x0703
     I2C_SLAVE_FORCE = 0x0706
