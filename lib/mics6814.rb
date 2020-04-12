@@ -60,7 +60,7 @@ class MiCS6814
       vn.to_f / v0.to_f * (1023.0 - v0) / (1023.0 - vn)
       # ratio0 = (float)An_0 / (float)A0_0 * (1023.0 - A0_0) / (1023.0 - An_0);
     end
-    pp [a0, an, ratio]
+    # pp [a0, an, ratio]
 
     led_off
 
@@ -75,6 +75,10 @@ class MiCS6814
     result['C2H5OH'] = (ratio[1] ** -1.552) * 1.622
 
     result
+  end
+
+  def raw_values
+    [CH_VALUE_NH3, CH_VALUE_CO, CH_VALUE_NO2].map {|ch| get_gas1(ch)}
   end
 
   def led_on
@@ -94,7 +98,7 @@ class MiCS6814
   end
 
   def write_adc
-    an = [CH_VALUE_NH3, CH_VALUE_CO, CH_VALUE_NO2].map {|ch| get_gas1(ch)}
+    an = raw_values
     bits = [7] + an.map {|x| [x >> 8, x & 0xff]}.flatten
     set_data(*bits)
   end
