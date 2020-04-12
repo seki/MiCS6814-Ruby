@@ -6,7 +6,7 @@ class MiCS6814
     @eeprom = {}
     @gas = Hash.new(0)
 
-    @version = eeprom(kind) == 1126 ? 2 : 1
+    @version = eeprom(0) == 1126 ? 2 : 1
   end
   attr_reader :version, :i2c
 
