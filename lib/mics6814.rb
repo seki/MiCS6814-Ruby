@@ -5,10 +5,13 @@ class MiCS6814
 
     @eeprom = {}
     @gas = Hash.new(0)
+
+    @version = eeprom(kind) == 1126 ? 2 : 1
   end
+  attr_reader :version, :i2c
 
   def get_data(*data)
-    @i2c.i2cget(@addr, *data, 2).unpack("n")
+    @i2c.i2cget(@addr, *data, 2).unpack("n").first
   end
 
   def set_data(*data)
@@ -24,7 +27,7 @@ class MiCS6814
   end
 
   def led_off
-    set_data(10, 1)
+    set_data(10, 0)
   end
 
   class MinI2C
