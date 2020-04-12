@@ -56,9 +56,10 @@ class MiCS6814
     an = [CH_VALUE_NH3, CH_VALUE_CO, CH_VALUE_NO2].map {|ch| get_gas1(ch)}
 
     ratio = a0.zip(an).map do |v0, vn|
-      vn.fdiv(v0) * (1023.0 - v0) / (1023.0 - vn)
+      vn.to_f / v0.to_f * (1023.0 - v0) / (1023.0 - vn)
       # ratio0 = (float)An_0 / (float)A0_0 * (1023.0 - A0_0) / (1023.0 - An_0);
     end
+    pp [a0, an, ratio]
 
     led_off
 
