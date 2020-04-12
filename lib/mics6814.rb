@@ -62,14 +62,14 @@ class MiCS6814
     led_off
 
     result = {}
-    result['CO'] = Math.pow(ratio[1], -1.179) * 4.385
-    result['NO2'] = Math.pow(ratio[2], 1.007) / 6.855
-    result['NH3'] = Math.pow(ratio[0], -1.67) / 1.47
-    result['C3H8'] = Math.pow(ratio[0], -2.518) * 570.164
-    result['C4H10'] = Math.pow(ratio[0], -2.138) * 398.107
-    result['CH4'] = Math.ow(ratio[1], -4.363) * 630.957
-    result['H2'] = Math.pow(ratio[1], -1.8) * 0.73
-    result['C2H5OH'] = Math.pow(ratio[1], -1.552) * 1.622
+    result['CO'] = (ratio[1] ** -1.179) * 4.385
+    result['NO2'] = (ratio[2] ** 1.007) / 6.855
+    result['NH3'] = (ratio[0] ** -1.67) / 1.47
+    result['C3H8'] = (ratio[0] ** -2.518) * 570.164
+    result['C4H10'] = (ratio[0] ** -2.138) * 398.107
+    result['CH4'] = (ratio[1] ** -4.363) * 630.957
+    result['H2'] = (ratio[1] ** -1.8) * 0.73
+    result['C2H5OH'] = (ratio[1] ** -1.552) * 1.622
 
     result
   end
