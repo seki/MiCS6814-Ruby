@@ -25,6 +25,7 @@ class MiCS6814
     @gas = Hash.new(0)
 
     @version = eeprom(ADDR_IS_SET) == 1126 ? 2 : 1
+    raise "V2 is required" unless @version == 2
   end
   attr_reader :version, :i2c
 
@@ -60,7 +61,17 @@ class MiCS6814
 
     led_off
 
-    pp [a0, a1, ratio]
+    result = {}
+    result['CO'] = Math.pow(ratio[1], -1.179) * 4.385
+    result['NO2'] = Math.pow(ratio[2], 1.007) / 6.855
+    result['NH3'] = Math.pow(ratio[0], -1.67) / 1.47
+    result['C3H8'] = Math.pow(ratio[0], -2.518) * 570.164
+    result['C4H10'] = Math.pow(ratio[0], -2.138) * 398.107
+    result['CH4'] = Math.ow(ratio[1], -4.363) * 630.957
+    result['H2'] = Math.pow(ratio[1], -1.8) * 0.73
+    result['C2H5OH'] = Math.pow(ratio[1], -1.552) * 1.622
+
+    result
   end
 
   def led_on
