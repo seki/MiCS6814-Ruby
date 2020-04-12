@@ -54,10 +54,6 @@ class MiCS6814
       get_data(6, addr)
     }
 
-    a0 = [ADDR_FACTORY_ADC_NH3, ADDR_FACTORY_ADC_CO, ADDR_FACTORY_ADC_NO2].map {|addr|
-      get_data(6, addr)
-    }
-
     an = [CH_VALUE_NH3, CH_VALUE_CO, CH_VALUE_NO2].map {|ch| get_gas1(ch)}
 
     ratio = a0.zip(an).map do |v0, vn|
@@ -87,6 +83,14 @@ class MiCS6814
 
   def led_off
     set_data(CMD_CONTROL_LED, 0)
+  end
+
+  def power_on
+    set_data(CMD_CONTROL_PWR, 1)
+  end
+
+  def power_off
+    set_data(CMD_CONTROL_PWR, 0)
   end
 
   class MinI2C
