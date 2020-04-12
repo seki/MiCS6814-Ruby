@@ -53,10 +53,11 @@ class MiCS6814
     a0 = [ADDR_USER_ADC_HN3, ADDR_USER_ADC_CO, ADDR_USER_ADC_NO2].map {|addr|
       get_data(6, addr)
     }
-    a1 = [CH_VALUE_NH3, CH_VALUE_CO, CH_VALUE_NO2].map {|ch| get_gas1(ch)}
+    an = [CH_VALUE_NH3, CH_VALUE_CO, CH_VALUE_NO2].map {|ch| get_gas1(ch)}
 
-    ratio = a0.zip(a1).map do |v0, v1|
-      v0.fdiv(v1) * (1023.0 - v0) / (1023.0 - v1)
+    ratio = a0.zip(an).map do |v0, vn|
+      vn.fdiv(v0) * (1023.0 - v0) / (1023.0 - vn)
+      # ratio0 = (float)An_0 / (float)A0_0 * (1023.0 - A0_0) / (1023.0 - An_0);
     end
 
     led_off
