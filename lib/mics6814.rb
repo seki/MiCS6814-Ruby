@@ -97,8 +97,8 @@ class MiCS6814
     set_data(CMD_CONTROL_PWR, 0)
   end
 
-  def write_adc
-    an = raw_values
+  def write_adc(an = raw_values)
+    # an = raw_values
     bits = [7] + an.map {|x| [x >> 8, x & 0xff]}.flatten
     set_data(*bits)
   end
