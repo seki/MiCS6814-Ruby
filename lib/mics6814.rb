@@ -2,6 +2,29 @@ class MiCS6814
   def initialize(addr=4)
     @addr = addr
     @i2c = MinI2C.new
+
+    @eeprom = {}
+    @gas = Hash.new(0)
+  end
+
+  def get_data(*data)
+    @i2c.i2cget(@addr, *data, 2).unpack("n")
+  end
+
+  def set_data(*data)
+    @i2c.i2cset(@addr, *data)
+  end
+
+  def eeprom(kind)
+    @eeprom[kind] ||= get_data(6, kind)
+  end
+
+  def led_on
+    set_data(10, 1)
+  end
+
+  def led_off
+    set_data(10, 1)
   end
 
   class MinI2C
