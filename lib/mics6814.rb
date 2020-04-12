@@ -53,6 +53,11 @@ class MiCS6814
     a0 = [ADDR_USER_ADC_HN3, ADDR_USER_ADC_CO, ADDR_USER_ADC_NO2].map {|addr|
       get_data(6, addr)
     }
+
+    a0 = [ADDR_FACTORY_ADC_NH3, ADDR_FACTORY_ADC_CO, ADDR_FACTORY_ADC_NO2].map {|addr|
+      get_data(6, addr)
+    }
+
     an = [CH_VALUE_NH3, CH_VALUE_CO, CH_VALUE_NO2].map {|ch| get_gas1(ch)}
 
     ratio = a0.zip(an).map do |v0, vn|
