@@ -1,4 +1,22 @@
 class MiCS6814
+  ADDR_IS_SET = 0
+  ADDR_FACTORY_ADC_NH3 = 2
+  ADDR_FACTORY_ADC_CO = 4
+  ADDR_FACTORY_ADC_NO2 = 6
+
+  ADDR_USER_ADC_HN3 = 8 # FIXME HN3? NH3??
+  ADDR_USER_ADC_CO = 10
+  ADDR_USER_ADC_NO2 = 12
+
+  CH_VALUE_NH3 = 1
+  CH_VALUE_CO = 2
+  CH_VALUE_NO2 = 3
+
+  CMD_READ_EEPROM = 6
+
+  CMD_CONTROL_LED = 10
+  CMD_CONTROL_PWR = 11
+
   def initialize(addr=4)
     @addr = addr
     @i2c = MinI2C.new
@@ -6,7 +24,7 @@ class MiCS6814
     @eeprom = {}
     @gas = Hash.new(0)
 
-    @version = eeprom(0) == 1126 ? 2 : 1
+    @version = eeprom(ADDR_IS_SET) == 1126 ? 2 : 1
   end
   attr_reader :version, :i2c
 
@@ -19,15 +37,38 @@ class MiCS6814
   end
 
   def eeprom(kind)
-    @eeprom[kind] ||= get_data(6, kind)
+    @eeprom[kind] ||= get_data(CMD_READ_EEPROM, kind)
+  end
+
+  def get_gas1(ch)
+    it = get_data(ch)
+    @gas[ch] = it if it > 0
+    @gas[ch]
+  end
+
+  def get_gas
+    led_on
+
+    a0 = [ADDR_USER_ADC_HN3, ADDR_USER_ADC_CO, ADDR_USER_ADC_NO2].map {|addr|
+      get_data(6, addr)
+    }
+    a1 = [CH_VALUE_NH3, CH_VALUE_CO, CH_VALUE_NO2].map {|ch| get_gas1(ch)}
+
+    ratio = a0.zip(a1).map do |v0, v1|
+      v0.fdiv(v1) * (1023.0 - v0) / (1023.0 - v1)
+    end
+
+    led_off
+
+    pp [a0, a1, ratio]
   end
 
   def led_on
-    set_data(10, 1)
+    set_data(CMD_CONTROL_LED, 1)
   end
 
   def led_off
-    set_data(10, 0)
+    set_data(CMD_CONTROL_LED, 0)
   end
 
   class MinI2C
